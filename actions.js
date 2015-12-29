@@ -41,7 +41,7 @@ legs = function () {
 
 initialDrawing();
 var drawThings = [rope, head, body, arms, legs];
-var categories = [["UNICORN", "DOG", "ELEPHANT", "GIRAFFE", "DOLPHIN"], ["CHICAGO", "PARIS", "SYDNEY", "BERLIN", "ROME"], ["JAWS", "TITANIC", "INCEPTION", "FROZEN", "TED"], ["FOOTBALL", "HOCKEY", "BASKETBALL", "SWIMMING", "RUNNING"]];
+var categories = [["UNICORN", "DOG", "ELEPHANT", "GIRAFFE", "DOLPHIN"], ["CHICAGO", "PARIS", "SYDNEY", "BERLIN", "ROME"], ["JAWS", "TITANIC", "INCEPTION", "FROZEN", "TED"], ["FOOTBALL", "HOCKEY", "DANCING", "SWIMMING", "RUNNING"]];
 var index = 0, word, lettToWin, newIndex, newWord, spaces, partOne, partTwo;
 var voc = "AEIOU";
 
@@ -55,18 +55,16 @@ function changeCategory() {
 
 function vowelsDisplay() {
   newWord = "";
-  spaces = 0;
   for (i in word) {
     if (voc.indexOf(word.charAt(i)) != -1) {
       newWord += word.charAt(i) + " ";
       lettToWin--;
-      //$().addClass("used");
+      var vowel = document.getElementById(word.charAt(i));
+      $(vowel).addClass("used");
     }
     else
       newWord += "_ ";
-    spaces++;
   }
-  spaces--;
   document.getElementById("wordDisplay").innerHTML = newWord;
 }
 
@@ -80,34 +78,45 @@ play();
 index = 0;
 
 $('li').click(function() { // check
-  var letter = this.innerHTML;
-  if (word.indexOf(letter) != -1) {
-    for (i in word)
-      if (letter == word.charAt(i)) {
-        if (i == 0) {
-          partOne = letter;
-          var res = newWord.substring(1, newWord.length);
-          partOne += res;
+  if (this.className != "used") {
+    var letter = this.innerHTML;
+    if (word.indexOf(letter) != -1) {
+      for (i in word)
+        if (letter == word.charAt(i)) {
+          if (i == 0) {
+            partOne = letter;
+            var res = newWord.substring(1, newWord.length);
+            partOne += res;
+          }
+          else {
+            partOne = newWord.substring(0, 2*i);
+            partTwo = newWord.substring(2*i+1, newWord.length);
+            partOne += letter + partTwo;
+          }
+          newWord = partOne; lettToWin--;
+          document.getElementById("wordDisplay").innerHTML = newWord;
         }
-        else {
-          partOne = newWord.substring(0, 2*i);
-          partTwo = newWord.substring(2*i+1, newWord.length);
-          partOne += letter + partTwo;
-        }
-        newWord = partOne; lettToWin--;
-        document.getElementById("wordDisplay").innerHTML = newWord;
-      }
+    }
+    else {
+      drawThings[index]();
+      index++;
+    }
+    $(this).addClass("used");
+    if (index == 5) {
+      document.getElementById("wordDisplay").innerHTML = "You lost!";
+      $("li").addClass("used");
+    }
+    if (lettToWin == 0) {
+      document.getElementById("wordDisplay").innerHTML = "You won!";
+      $("li").addClass("used");
+    }
   }
-  else {
-    drawThings[index]();
-    index++;
-  }
-  $(this).addClass("used");
-  if (index == 5)
-    document.getElementById("wordDisplay").innerHTML = "You lost!";
-  if (lettToWin == 0)
-    document.getElementById("wordDisplay").innerHTML = "You won!";
 });
 
-// de marcat vocale
-// play again
+$("#again").click(function() {
+  $("li").removeClass("used");
+  document.getElementById("wordDisplay").innerHTML = "";
+  context.clearRect(0, 0, 300, 200);
+  initialDrawing();
+  play();
+});
