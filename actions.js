@@ -42,7 +42,7 @@ legs = function () {
 initialDrawing();
 var drawThings = [rope, head, body, arms, legs];
 var categories = [["UNICORN", "DOG", "ELEPHANT", "GIRAFFE", "DOLPHIN"], ["CHICAGO", "PARIS", "SYDNEY", "BERLIN", "ROME"], ["JAWS", "TITANIC", "INCEPTION", "FROZEN", "TED"], ["FOOTBALL", "HOCKEY", "DANCING", "SWIMMING", "RUNNING"]];
-var index = 0, word, lettToWin, newIndex, newWord, spaces, partOne, partTwo;
+var index = 0, word, lettToWin, newWord, partOne, partTwo;
 var voc = "AEIOU";
 
 function changeCategory() {
@@ -117,6 +117,7 @@ $("#again").click(function() {
   $("li").removeClass("used");
   document.getElementById("wordDisplay").innerHTML = "";
   context.clearRect(0, 0, 300, 200);
+  index = 0;
   initialDrawing();
   play();
 });
