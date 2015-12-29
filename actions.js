@@ -42,15 +42,16 @@ legs = function () {
 initialDrawing();
 var drawThings = [rope, head, body, arms, legs];
 var categories = [["UNICORN", "DOG", "ELEPHANT", "GIRAFFE", "DOLPHIN"], ["CHICAGO", "PARIS", "SYDNEY", "BERLIN", "ROME"], ["JAWS", "TITANIC", "INCEPTION", "FROZEN", "TED"], ["FOOTBALL", "HOCKEY", "DANCING", "SWIMMING", "RUNNING"]];
-var index = 0, word, lettToWin, newWord, partOne, partTwo;
+var index = 0, word, lettToWin, newWord, partOne, partTwo, index2 = 0;
 var voc = "AEIOU";
 
 function changeCategory() {
+  
   var select = document.getElementById("select");
   var selectedValue = select.options[select.selectedIndex].value;
   index = Number(selectedValue);
-  document.getElementById("wordDisplay").innerHTML = "";
-  play();
+  index2 = 0;
+  reset();
 };
 
 function vowelsDisplay() {
@@ -69,6 +70,7 @@ function vowelsDisplay() {
 }
 
 function play() {
+  //alert(index);
   word = categories[index][Math.floor(Math.random() * 5)];
   lettToWin = word.length;
   vowelsDisplay();
@@ -98,26 +100,28 @@ $('li').click(function() { // check
         }
     }
     else {
-      drawThings[index]();
-      index++;
+      drawThings[index2]();
+      index2++;
     }
     $(this).addClass("used");
-    if (index == 5) {
+    if (index2 == 5) {
       document.getElementById("wordDisplay").innerHTML = "You lost!";
       $("li").addClass("used");
+      index2 = 0;
     }
     if (lettToWin == 0) {
       document.getElementById("wordDisplay").innerHTML = "You won!";
       $("li").addClass("used");
+      index2 = 0;
     }
   }
 });
 
-$("#again").click(function() {
+
+function reset() {
   $("li").removeClass("used");
   document.getElementById("wordDisplay").innerHTML = "";
   context.clearRect(0, 0, 300, 200);
-  index = 0;
   initialDrawing();
   play();
-});
+};
